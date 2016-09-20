@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Blackjack</title>
+</head>
+
+<body>
+    <span>Dealer cards: </span>
+    <ul id="dealer_cards">
+        <li>Card1</li>
+        <li>Card2</li>
+    </ul>
+    <span id="dealer_score">Score: {null}</span>
+    <br><br><br><br><br>
+    <span id="money_bet">{null}$</span>
+    <br>
+    <span id="game_result">Blackjack</span>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <span>Player cards:</span>
+    <ul id="player_cards">
+        <li>Card1</li>
+        <li>Card2</li>
+    </ul>
+    <span id="player_score">Score: 0</span>
+    <br>
+
+    <span id="player_cash">Cash: {null}$</span>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div id="controls">
+        <label for="money_amount_input">Bet: </label>
+        <input id="money_amount_input" type="text">
+        <br>
+        <br>
+        <button id="start_btn" onclick="blackjack.StartGame();">Start game</button>
+        <button id="deal_btn" onclick="blackjack.Deal();">Deal</button>
+        <button id="double_btn">Double</button>
+        <button id="hit_btn">Hit</button>
+        <button id="surrender_btn">Surrender</button>
+        <button id="stand_btn">Stand</button>
+        <button id="split_btn">Split</button>
+
+    </div>
+
+
+
+    <script src="js/main.js">
+    </script>
+</body>
+
+</html>
