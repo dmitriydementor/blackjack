@@ -4,36 +4,46 @@
 <head>
     <meta charset="utf-8">
     <title>Blackjack</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
 <body>
-    <span>Dealer cards: </span>
     <ul id="dealer_cards">
         <li>Card1</li>
         <li>Card2</li>
     </ul>
     <span id="dealer_score">Score: {null}</span>
     <br><br><br><br><br>
-    <span id="money_bet">{null}$</span>
-    <br>
-    <span id="game_result">Blackjack</span>
     <br>
     <br>
     <br>
     <br>
+    <div id="player_cards_container">
+        <ul id="player_cards1">
+            <li>Card1</li>
+            <li>Card2</li>
+        </ul>
+        <span id="player_score">Score1: 0</span>
+        <span id="money_bet1">{null}$</span>
+        <br>
+        <ul id="player_cards2">
+            <li>Card1</li>
+            <li>Card2</li>
+        </ul>
+        <br>
+        <span id="player_score1">Score2: 0</span>
+        <span id="money_bet2">{null}$</span>
+    </div>
+
     <br>
-    <span>Player cards:</span>
-    <ul id="player_cards">
-        <li>Card1</li>
-        <li>Card2</li>
-    </ul>
-    <span id="player_score">Score: 0</span>
+    <br>
     <br>
 
     <span id="player_cash">Cash: {null}$</span>
-    <br>
-    <br>
-    <br>
+
     <br>
     <br>
 
@@ -44,16 +54,17 @@
         <br>
         <button id="start_btn" onclick="blackjack.StartGame();">Start game</button>
         <button id="deal_btn" onclick="blackjack.Deal();">Deal</button>
-        <button id="double_btn">Double</button>
-        <button id="hit_btn">Hit</button>
-        <button id="surrender_btn">Surrender</button>
-        <button id="stand_btn">Stand</button>
-        <button id="split_btn">Split</button>
+        <button id="double_btn" onclick="blackjack.Double();">Double</button>
+        <button id="hit_btn" onclick="blackjack.Hit();">Hit</button>
+        <button id="surrender_btn" onclick="blackjack.Surrender();">Surrender</button>
+        <button id="stand_btn" onclick="blackjack.Stand();">Stand</button>
+        <button id="split_btn" onclick="blackjack.Split();">Split</button>
 
     </div>
 
 
-
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
     <script src="js/main.js">
     </script>
 </body>
