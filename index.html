@@ -48,26 +48,39 @@
     <br>
 
     <div id="controls">
-        <label for="money_amount_input">Bet: </label>
-        <input id="money_amount_input" type="text">
+        <div id="amount_selectors_container">
+            <button class="amount_selector">1</button>
+            <button class="amount_selector">2</button>
+            <button class="amount_selector">5</button>
+            <button class="amount_selector">10</button>
+            <button class="amount_selector">50</button>
+        </div>
+
+
         <br>
         <br>
-        <button id="start_btn" onclick="blackjack.StartGame();">Start game</button>
         <button id="deal_btn" onclick="blackjack.Deal();">Deal</button>
         <button id="double_btn" onclick="blackjack.Double();">Double</button>
         <button id="hit_btn" onclick="blackjack.Hit();">Hit</button>
         <button id="surrender_btn" onclick="blackjack.Surrender();">Surrender</button>
         <button id="stand_btn" onclick="blackjack.Stand();">Stand</button>
         <button id="split_btn" onclick="blackjack.Split();">Split</button>
-
     </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <ul id="test_results">
+    </ul>
 
 
     <!--<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>-->
     <!--<script src="js/main.js"/>-->
-    <script src="js/blackjack.js"/>
-    </script>
+    <script src="js/blackjack.js"/></script>
+    <script src="js/test.js"></script>
 </body>
 
 </html>

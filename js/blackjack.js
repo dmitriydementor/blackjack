@@ -15,56 +15,68 @@ var Card = function(name, suit, value, alternativeValue) {
     } else {
         this.alternativeValue = alternativeValue;
     }
-
 };
 
 var Player = function(userName, cash) {
     this.userName = userName;
     this.cash = cash;
+    this.playerHands = [];
+    this.currentHandIndex = 0;
 };
 
-var PlayerHand = function(cards, score, moneyBet) {
+var PlayerHand = function(cards, moneyBet) {
     this.cards = cards;
-    this.score = score;
     this.moneyBet = moneyBet;
-    this.GetScore = function() {
-        var score1 = 0;
-        var score2 = 0;
-        for (var i = 0; i < cards.length; i++) {
-            score1 += cards[i].value;
-        }
-        if (!this.HasAce()) {
-            return score1;
-        } else {
-            for (var i = 0; i < cards.length; i++) {
-                score2 += cards[i].alternativeValue;
-            }
-            if (score1 <= 21 && score2 <= 21) {
-                return Math.max(score1, score2);
-            } else if (score1 > 21 && score2 > 21) {
-                return Math.min(score1, score2);
-            } else if ((score1 <= 21 && score2 > 21) ||
-                (score1 > 21 && score2 <= 21)) {
-                this.SelectRightScore();
-            }
+};
 
-        }
-    };
-    this.SelectRightScore = function(score1, score2) {
-        if (score1 <= 21 && score2 > 21) {
-            return score1;
-        } else {
-            return score2;
-        }
-    };
-    this.HasAce = function() {
+PlayerHand.prototype.GetScore = function() {
+    var score1 = 0;
+    var score2 = 0;
+    for (var i = 0; i < cards.length; i++) {
+        score1 += cards[i].value;
+    }
+    if (!this.HasAce()) {
+        return score1;
+    } else {
         for (var i = 0; i < cards.length; i++) {
-            if (cards[i].name === 'Ace') {
-                return true;
-            }
+            score2 += cards[i].alternativeValue;
         }
-        return false;
-    };
+        if (score1 <= 21 && score2 <= 21) {
+            return Math.max(score1, score2);
+        } else if (score1 > 21 && score2 > 21) {
+            return Math.min(score1, score2);
+        } else if ((score1 <= 21 && score2 > 21) ||
+            (score1 > 21 && score2 <= 21)) {
+            return this.SelectRightScore(score1, score2);
+        }
+
+    }
+};
+
+PlayerHand.prototype.SelectRightScore = function(score1, score2) {
+    if (score1 <= 21 && score2 > 21) {
+        return score1;
+    } else {
+        return score2;
+    }
+};
+
+PlayerHand.prototype.HasAce = function() {
+    for (var i = 0; i < cards.length; i++) {
+        if (cards[i].name === 'Ace') {
+            return true;
+        }
+    }
+    return false;
+};
+
+PlayerHand.prototype.CanSplit = function() {
+    if (this.cards.length === 2) {
+        if (this.cards[0].value === this.cards[1]) {
+            return true;
+        }
+    }
+    return false;
 };
 
 var deckGenerator = {
@@ -100,7 +112,46 @@ var Blackjack = function(amountOfdecks) {
     }
     this.cards = [];
     for (var i = 0; i < amountOfdecks; i++) {
-      this.cards = this.cards.concat(deckGenerator.GetDeck());
+        this.cards = this.cards.concat(deckGenerator.GetDeck());
     }
+};
+
+Blackjack.prototype.Deal = function() {
 
 };
+
+
+var Controls = function() {
+    this.dealBtn = document.getElementById('deal_btn');
+    this.doubleBtn = document.getElementById('double_btn');
+    this.hitBtn = document.getElementById('hit_btn');
+    this.surrenderBtn = document.getElementById('surrender_btn');
+    this.splitBtn = document.getElementById('split_btn');
+    this.standBtn = document.getElementById('stand_btn');
+    this.amountSelectors = []; // numbers to be displayed as coins with its value
+};
+
+Controls.prototype.SetAmountSelectors = function() {
+    var moneyAmount = player.cash;
+    var amountNumberLength = moneyAmount.toString().length; // get length to create divider
+    var divider = '1';
+
+    for (var i = 0; i < amountNumberLength - 1; i++) {
+        divider += '0';
+    }
+
+    while (amountNumberLength !== 0) {
+
+    }
+};
+
+
+
+/**
+ * ========================================================================================================================================
+ * Game instances go here
+ */
+
+var player = new Player('dmitriydementor', 10000);
+var blackjack = new Blackjack(2);
+var controls = new Controls();
