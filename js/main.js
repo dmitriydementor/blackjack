@@ -6,6 +6,50 @@ var cardSuites = ['spades', // pika
     'clubs' // hresta
 ];
 
+var Card = function(name, suit, value, alternativeValue) {
+    this.name = name;
+    this.suit = suit;
+    this.value = value;
+    if (alternativeValue === undefined) {
+        this.alternativeValue = value;
+    } else {
+      this.alternativeValue = alternativeValue;
+    }
+
+};
+
+var Player = function(userName, cash) {
+    this.userName = userName;
+    this.cash = cash;
+};
+
+var PlayerHand = function(cards, bestScore) {
+    this.cards = cards;
+    this.bestScore = bestScore;
+    this.GetBestScore = function() {
+        var score = 0;
+        if (!this.HasAce()) {
+            for (var i = 0; i < cards.length; i++) {
+                score += cards[i].value;
+            }
+        } else {
+            for (var i = 0; i < cards.length; i++) {
+                score += cards[i].alternativeValue;
+            }
+        }
+    };
+    this.HasAce = function() {
+        for (var i = 0; i < cards.length; i++) {
+            if (cards[i].name === 'Ace') {
+                return true;
+            }
+        }
+        return false;
+    };
+};
+
+
+
 var deckGenerator = {
     GetDeck: function() {
         var deck = [];
@@ -13,33 +57,13 @@ var deckGenerator = {
         for (var i = 0; i < 4; i++) {
             // fill numbers-cards
             for (var j = 2; j <= 10; j++) {
-                deck.push({
-                    name: `${j}`,
-                    suit: cardSuites[i],
-                    value: j,
-                });
+                deck.push(new Card(`${j}`, cardSuites[i], j));
                 // end fill number-cards
             }
-            deck.push({
-                name: 'Jack',
-                suit: cardSuites[i],
-                value: 10
-            });
-            deck.push({
-                name: 'Queen',
-                suit: cardSuites[i],
-                value: 10
-            });
-            deck.push({
-                name: 'King',
-                suit: cardSuites[i],
-                value: 10
-            });
-            deck.push({
-                name: 'Ace',
-                suit: cardSuites[i],
-                value: 1
-            });
+            deck.push(new Card('Jack', cardSuites[i], 10));
+            deck.push(new Card('Queen', cardSuites[i], 10));
+            deck.push(new Card('King', cardSuites[i], 10));
+            deck.push(new Card('Ace', cardSuites[i], 1, 11));
             // end of suit gneration
         }
         return deck;
@@ -77,15 +101,16 @@ var blackjack = {
             var dealerResult = this.GetResult('dealer');
             // check if both has blackjack
             if (playerResult === 'blackjack' && dealerResult === 'blackjack') {
-                this.PullBecauseOfDraw(); // return bet
-                this.EndGame(); // set all default values
+                this.PullBecauseOfDraw(); // return bet to the player
+                this.gameResultMessage = 'Both blackjack! PULL';
+                setTimeout(this.DisplayResult, 3000); // display result to the player and end game after some time
             } else if (playerResult !== 'blackjack' && dealerResult === 'blackjack') {
-                this.PlayerLooses(0, 'dealers blackjack');
-                this.EndGame(); // set all default values
+                this.gameResultMessage = 'Dealers blackjack!';
+                setTimeout(this.DisplayResult, 3000); // display result to the player and end game after some time
             } else if (playerResult === 'blackjack' && dealerResult !== 'blackjack') {
-                this.player.cash += this.CalculatePrizeMoney('blackjack', this.moneyBet[0]);
-                console.log('Players blackjack');
-                this.EndGame();
+                this.player.cash += this.moneyBet[0] * 3
+                this.gameResultMessage = 'Player blackjack! WIN';
+                setTimeout(this.DisplayResult, 3000); // display result to the player and end game after some time
             } else {
                 this.player.canSplit = this.CanSplit();
                 virtualDomHolder.dealBtn.disabled = true;
@@ -94,19 +119,46 @@ var blackjack = {
         }
     },
 
+    DisplayResult: function() {
+        alert(blackjack.gameResultMessage)
+        setTimeout(function() {
+            blackjack.UpdateUI();
+        }, 2000); // clean table after 2 secs
+        if ((blackjack.player.currentDeckIndex === 1 && blackjack.player.canSplit) ||
+            (blackjack.player.currentDeckIndex === 0 && !blackjack.player.canSplit)) {
+            blackjack.EndGame();
+        }
+    },
+
+    ReturnMoneyAccordingToResult: function(playerResult, dealerResult) {
+        if ((playerResult === 'win' && dealerResult === 'busted') ||
+            (playerResult < dealerResult)) {
+            this.player.cash = this.moneyBet[this.player.currentDeckIndex] * 2;
+            this.gameResultMessage = `Deck ${this.player.currentDeckIndex} WIN`;
+            setTimeout(this.DisplayResult, 3000);
+        } else if ((playerResult === 'busted' && dealerResult === 'win') ||
+            (playerResult > dealerResult)) {
+            this.gameResultMessage = `Deck ${this.player.currentDeckIndex} BUSTED`;
+            setTimeout(this.DisplayResult, 3000);
+        }
+    },
+
     Stand: function() {
+        var playerResult = this.GetResult('player', this.player.currentDeckIndex);
+        var dealerResult = this.GetResult('dealer');
         if (this.player.currentDeckIndex === 0 && this.player.canSplit) {
-            this.player.currentDeckIndex++;
-        } else if (this.player.currentDeckIndex === 1 && this.player.canSplit) {
-            while (this.dealer.score < 17) {
-                this.GiveDealerOneMoreCard();
-            }
-            this.UpdateUI();
+            this.ReturnMoneyAccordingToResult(playerResult, dealerResult);
+            this.player.currentDeckIndex++; // go to next hand if player splited
         } else {
-          while (this.dealer.score < 17) {
-              this.GiveDealerOneMoreCard();
-          }
-          this.UpdateUI();
+            this.FillDealersHand(); // if on last deck
+        }
+        this.ReturnMoneyAccordingToResult(playerResult, dealerResult);
+        this.UpdateUI();
+    },
+
+    FillDealersHand: function() {
+        while (this.dealer.score < 17) {
+            this.GiveDealerOneMoreCard();
         }
     },
 
@@ -140,6 +192,8 @@ var blackjack = {
         this.GivePlayerOneMoreCard(this.player.currentDeckIndex);
         var result = this.GetResult('player', this.player.currentDeckIndex);
         if (result === 'busted') {
+            this.gameResultMessage = `Deck ${this.player.currentDeckIndex} busted`;
+            setTimeout(this.DisplayResult, 3000);
             var deckIndex = this.player.currentDeckIndex;
             this.moneyBet[deckIndex] = 0;
             switch (deckIndex) {
@@ -149,7 +203,6 @@ var blackjack = {
                             this.player.currentDeckIndex++; // move to next deck
                         } else {
                             virtualDomHolder.hitBtn.disabled = true;
-                            // this.EndGame(); // end game if only deck was busted
                         }
                         break;
                     }
@@ -157,7 +210,6 @@ var blackjack = {
                     virtualDomHolder.hitBtn.disabled = true;
                     break; // end game if last deck was busted
             }
-            console.log(`Deck ${deckIndex} busted`);
         }
         this.UpdatePlayer();
         this.UpdateBet();
@@ -171,7 +223,8 @@ var blackjack = {
         var result = this.GetResult('player', this.player.currentDeckIndex);
         if (result === 'busted') {
             this.moneyBet[this.player.currentDeckIndex] = 0;
-            this.PlayerLooses(this.player.currentDeckIndex, 'busted');
+            this.gameResultMessage = `Deck ${this.player.currentDeckIndex} busted!`;
+            this.DisplayResult();
         }
         virtualDomHolder.doubleBtn.disabled = true;
         virtualDomHolder.hitBtn.disabled = true;
@@ -187,20 +240,10 @@ var blackjack = {
 
     PullBecauseOfDraw: function() {
         this.player.cash += (this.moneyBet[0] + this.moneyBet[1]);
-        console.log('Pull');
     },
 
     PlayerLooses: function(deckIndex, reason) {
         console.log(`Deck ${deckIndex+1} lost! because of ${reason}`);
-    },
-
-    CalculatePrizeMoney: function(result, bet) {
-        var currentDeckIndex = this.player.currentDeckIndex;
-        if (result === 'blackjack') {
-            return bet * 3;
-        } else if (result === 'win') {
-            return bet * 2;
-        }
     },
 
     CanSplit: function() {
@@ -355,6 +398,7 @@ var blackjack = {
     amountOfdecks: null,
     moneyBet: [0, 0],
     cards: [],
+    gameResultMessage: '',
     dealer: {
         cards: [],
         score: 0
