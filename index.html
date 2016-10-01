@@ -11,76 +11,97 @@
 </head>
 
 <body>
-    <ul id="dealer_cards">
-        <li>Card1</li>
-        <li>Card2</li>
-    </ul>
-    <span id="dealer_score">Score: {null}</span>
-    <br><br><br><br><br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div id="player_cards_container">
-        <ul id="player_cards1">
-            <li>Card1</li>
-            <li>Card2</li>
-        </ul>
-        <span id="player_score">Score1: 0</span>
-        <span id="money_bet1">{null}$</span>
-        <br>
-        <ul id="player_cards2">
-            <li>Card1</li>
-            <li>Card2</li>
-        </ul>
-        <br>
-        <span id="player_score1">Score2: 0</span>
-        <span id="money_bet2">{null}$</span>
-    </div>
+    <nav>
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo">Blackjack</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class="dropdown-button" href="#!" data-activates="dropdown1">dmitriydementor<i class="material-icons right">arrow_drop_down</i></a></li>
+            </ul>
+            <ul id="dropdown1" class="dropdown-content">
+                <li><a href="#!">Profile</a></li>
+                <li class="divider"></li>
+                <li><a href="#!">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <br>
-    <br>
-    <br>
+    <div class="container">
 
-    <span id="player_cash">Cash: {null}$</span>
+        <div class="row">
+            <div class="col s12 center-align">
+                <span class="card" id="player_cash">$10000</span>
+            </div>
+        </div>
 
-    <br>
-    <br>
-
-    <div id="controls">
-        <div id="amount_selectors_container">
-            <button class="amount_selector">1</button>
-            <button class="amount_selector">2</button>
-            <button class="amount_selector">5</button>
-            <button class="amount_selector">10</button>
-            <button class="amount_selector">50</button>
+        <div id="dealer_hand_container row">
+            <div class="col s12 center-align">
+                <img src="img/Ace-of-clubs.svg" alt="" height="150px" />
+                <img src="img/card-back.svg" alt="" height="150px" />
+            </div>
         </div>
 
 
+        <br><br><br><br>
+
+        <div class="row">
+            <div class="col s12 center-align">
+                <div id="player_hands_container">
+                    <span class="card player_hand">
+                        <img src="img/Ace-of-clubs.svg" alt="" height="150px" />
+                        <img src="img/King-of-hearts.svg" alt="" height="150px" />
+                        <div class="hand-info">
+                          active
+                        </div>
+                    </span>
+                    <span class="card player_hand">
+                        <img src="img/Ace-of-clubs.svg" alt="" height="150px" />
+                        <img src="img/King-of-hearts.svg" alt="" height="150px" />
+                        <div class="hand-info">
+                          Score: 21
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+
         <br>
         <br>
-        <button id="deal_btn" onclick="blackjack.Deal();">Deal</button>
-        <button id="double_btn" onclick="blackjack.Double();">Double</button>
-        <button id="hit_btn" onclick="blackjack.Hit();">Hit</button>
-        <button id="surrender_btn" onclick="blackjack.Surrender();">Surrender</button>
-        <button id="stand_btn" onclick="blackjack.Stand();">Stand</button>
-        <button id="split_btn" onclick="blackjack.Split();">Split</button>
+        <br>
+
+
+        <br>
+        <br>
+        <div class="row">
+            <div class="col s12 center-align">
+                <div id="controls">
+                    <br>
+                    <br>
+                    <button id="deal_btn" onclick="blackjack.Deal();" class="waves-effect waves-light btn-large">Deal</button>
+                    <button id="double_btn" onclick="blackjack.Double();" class="waves-effect waves-light btn-large">Double</button>
+                    <button id="hit_btn" onclick="blackjack.Hit();" class="waves-effect waves-light btn-large">Hit</button>
+                    <button id="surrender_btn" onclick="blackjack.Surrender();" class="waves-effect waves-light btn-large">Surrender</button>
+                    <button id="stand_btn" onclick="blackjack.Stand();" class="waves-effect waves-light btn-large">Stand</button>
+                    <button id="split_btn" onclick="blackjack.Split();" class="waves-effect waves-light btn-large">Split</button>
+                </div>
+            </div>
+        </div>
+
+
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <ul id="test_results">
+        </ul>
+
     </div>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <ul id="test_results">
-    </ul>
-
-
-    <!--<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>-->
-    <!--<script src="js/main.js"/>-->
-    <script src="js/blackjack.js"/></script>
-    <script src="js/test.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script src="js/blackjack.js" /></script>
+    <!--<script src="js/test.js"></script>-->
 </body>
 
 </html>
