@@ -8079,3 +8079,14 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
 #player_cash {
   padding: 10px;
 }
+
+.card_image {
+  height: 110px;
+}
+
+.hand_score {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-block;
+}

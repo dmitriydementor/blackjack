@@ -7,13 +7,13 @@ var deckGenerator = {
         for (var i = 0; i < 4; i++) {
             // fill numbers-cards
             for (var j = 2; j <= 10; j++) {
-                deck.push(new Card(`${j}`, cardSuites[i], j));
+                deck.push(new Card(`${j}`, cardSuites[i], j, j, `img/${cardSuites[i]}/${j}.svg`));
                 // end fill number-cards
             }
-            deck.push(new Card('Jack', cardSuites[i], 10));
-            deck.push(new Card('Queen', cardSuites[i], 10));
-            deck.push(new Card('King', cardSuites[i], 10));
-            deck.push(new Card('Ace', cardSuites[i], 1, 11));
+            deck.push(new Card('Jack', cardSuites[i], 10, 10, `img/${cardSuites[i]}/Jack.svg`));
+            deck.push(new Card('Queen', cardSuites[i], 10, 10, `img/${cardSuites[i]}/Queen.svg`));
+            deck.push(new Card('King', cardSuites[i], 10, 10, `img/${cardSuites[i]}/King.svg`));
+            deck.push(new Card('Ace', cardSuites[i], 1, 11, `img/${cardSuites[i]}/Ace.svg`));
             // end of suit gneration
         }
         return deck;
@@ -32,7 +32,7 @@ var cardSuites = ['spades', // pika
     'clubs' // hresta
 ];
 
-var Card = function(name, suit, value, alternativeValue) {
+var Card = function(name, suit, value, alternativeValue, image) {
     this.name = name;
     this.suit = suit;
     this.value = value;
@@ -41,6 +41,7 @@ var Card = function(name, suit, value, alternativeValue) {
     } else {
         this.alternativeValue = alternativeValue;
     }
+    this.image = image;
 };
 
 var Player = function(userName, cash) {
@@ -70,6 +71,7 @@ var PlayerHand = function(cards, moneyBet, status) {
     this.moneyBet = moneyBet;
     this.wasDoubled = false;
     this.status = status;
+    this.isActive = false;
 
 };
 
@@ -134,6 +136,31 @@ PlayerHand.prototype.CompareTo = function(anotherObj) {
     var score1 = this.GetScore() > 21 ? 0 : this.GetScore();
     var score2 = anotherObj.GetScore() > 21 ? 0 : anotherObj.GetScore();
     return score1 - score2;
+};
+
+PlayerHand.prototype.GetHTMLMarkdown = function functionName() {
+  var rootHandElement = document.createElement('span');
+  rootHandElement.className='card player_hand';
+  for (var i = 0; i < this.cards.length; i++) {
+    var cardImage =  document.createElement('img');
+    cardImage.src = this.cards[i].image;
+    cardImage.className = 'card_image';
+    rootHandElement.appendChild(cardImage);
+  }
+  var handInfo = document.createElement('div');
+  handInfo.className = 'hand_info';
+  handInfo.innerHTML = this.status;
+  var handScore = document.createElement('span');
+  handScore.className='hand_score';
+  handScore.innerHTML = this.GetScore();
+
+  rootHandElement.appendChild(handInfo);
+  rootHandElement.appendChild(handScore);
+  return rootHandElement;
+
+
+
+
 };
 
 var Blackjack = function(amountOfdecks) {
