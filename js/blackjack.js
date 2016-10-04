@@ -139,28 +139,24 @@ PlayerHand.prototype.CompareTo = function(anotherObj) {
 };
 
 PlayerHand.prototype.GetHTMLMarkdown = function functionName() {
-  var rootHandElement = document.createElement('span');
-  rootHandElement.className='card player_hand';
-  for (var i = 0; i < this.cards.length; i++) {
-    var cardImage =  document.createElement('img');
-    cardImage.src = this.cards[i].image;
-    cardImage.className = 'card_image';
-    rootHandElement.appendChild(cardImage);
-  }
-  var handInfo = document.createElement('div');
-  handInfo.className = 'hand_info';
-  handInfo.innerHTML = this.status;
-  var handScore = document.createElement('span');
-  handScore.className='hand_score';
-  handScore.innerHTML = this.GetScore();
+    var rootHandElement = document.createElement('span');
+    rootHandElement.className = 'card player_hand';
+    for (var i = 0; i < this.cards.length; i++) {
+        var cardImage = document.createElement('img');
+        cardImage.src = this.cards[i].image;
+        cardImage.className = 'card_image';
+        rootHandElement.appendChild(cardImage);
+    }
+    var handInfo = document.createElement('div');
+    handInfo.className = 'hand_info';
+    handInfo.innerHTML = `$${this.moneyBet}`;
+    var handScore = document.createElement('span');
+    handScore.className = 'hand_score';
+    handScore.innerHTML = this.GetScore();
 
-  rootHandElement.appendChild(handInfo);
-  rootHandElement.appendChild(handScore);
-  return rootHandElement;
-
-
-
-
+    rootHandElement.appendChild(handInfo);
+    rootHandElement.appendChild(handScore);
+    return rootHandElement;
 };
 
 var Blackjack = function(amountOfdecks) {
@@ -213,16 +209,19 @@ var Blackjack = function(amountOfdecks) {
             case 'playersBlackjack':
                 {
                     player.playerHands[0].status = 'blackjack';
+                    console.log('playersBlackjack');
                     break;
                 }
             case 'dealersBlackjack':
                 {
                     player.playerHands[0].status = 'Dealers blackjack';
+                    console.log('dealersBlackjack');
                     break;
                 }
             case 'bothBlackjack':
                 {
                     player.playerHands[0].status = 'both blackjack';
+                    console.log('both blackjack');
                     break;
                 }
             case 'nothing':
@@ -235,6 +234,7 @@ var Blackjack = function(amountOfdecks) {
                 }
 
         }
+        gameuielements.UpdateHands(player.playerHands);
     };
     this.Double = function() {
         player.playerHands[player.currentHandIndex].moneyBet *= 2;
@@ -341,73 +341,20 @@ var GameUIElements = function() {
     this.UpdateHands = function(playerHands) {
         this.playerHandsContainer.innerHTML = null;
         for (var i = 0; i < playerHands.length; i++) {
-            var playerHandElement = document.createElement('div');
-            playerHandElement.className = 'player_hand';
+            var playerHandElement = playerHands[i].GetHTMLMarkdown();
             playerHandElement.id = `player_hand${i}`;
-            var cardsElement = document.createElement('ul');
-            for (var j = 0; j < playerHands[i].cards.length; j++) {
-                var li = document.createElement('li');
-                li.innerHTML = `${playerHands[i].cards[j].name} of ${playerHands[i].cards[j].suit}`;
-                cardsElement.appendChild(li);
-            }
-            playerHandElement.appendChild(cardsElement);
-            var score = document.createElement('span');
-            score.innerHTML = `Score: ${playerHands[i].GetScore()}`;
-            playerHandElement.appendChild(score);
-            playerHandElement.appendChild(document.createElement('br'));
-
-            var moneyBet = document.createElement('span');
-            moneyBet.innerHTML = `$${playerHands[i].moneyBet}`;
-            playerHandElement.appendChild(moneyBet);
-
-            var status = document.createElement('span');
-            status.innerHTML = playerHands[i].status;
-            playerHandElement.appendChild(document.createElement('br'));
-            playerHandElement.appendChild(status);
             this.playerHandsContainer.appendChild(playerHandElement);
         }
     };
-    this.dealerHand = document.getElementById('dealer_hand_container');
+    this.dealerHandContainer = document.getElementById('dealer_hand_container');
     this.UpdateHand = function(handIndex, playerHand) {
         var id = `player_hand${handIndex}`;
         var hand = document.getElementById(id);
-        hand.innerHTML = null;
-        var cardsElement = document.createElement('ul');
-        for (var j = 0; j < playerHand.cards.length; j++) {
-            var li = document.createElement('li');
-            li.innerHTML = `${playerHand.cards[j].name} of ${playerHand.cards[j].suit}`;
-            cardsElement.appendChild(li);
-        }
-        hand.appendChild(cardsElement);
-        var score = document.createElement('span');
-        score.innerHTML = `Score: ${playerHand.GetScore()}`;
-        hand.appendChild(score);
-        hand.appendChild(document.createElement('br'));
-
-
-        var moneyBet = document.createElement('span');
-        moneyBet.innerHTML = `$${playerHand.moneyBet}`;
-        hand.appendChild(moneyBet);
-
-        var status = document.createElement('span');
-        status.innerHTML = playerHand.status;
-        hand.appendChild(document.createElement('br'));
-        hand.appendChild(status);
+        hand.innerHTML = playerHand.GetHTMLMarkdown().innerHTML;
     };
     this.UpdateDealer = function(dealerHand) {
-        this.dealerHand.innerHTML = null;
-        if (dealerHand !== null) {
-            var cardsElement = document.createElement('ul');
-            for (var j = 0; j < dealerHand.cards.length; j++) {
-                var li = document.createElement('li');
-                li.innerHTML = `${dealerHand.cards[j].name} of ${dealerHand.cards[j].suit}`;
-                cardsElement.appendChild(li);
-            }
-            this.dealerHand.appendChild(cardsElement);
-            var score = document.createElement('span');
-            score.innerHTML = `Score: ${dealerHand.GetScore()}`;
-            this.dealerHand.appendChild(score);
-        }
+        this.dealerHandContainer.innerHTML = null;
+        this.dealerHandContainer.appendChild(dealerHand.GetHTMLMarkdown());
     };
 
     this.cash = document.getElementById('player_cash');

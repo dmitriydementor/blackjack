@@ -8066,7 +8066,7 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
   color: #be4343;
 }
 
-#player_hands_container .player_hand {
+.player_hand {
   display: inline-block;
   margin: 10px;
   padding: 10px;
@@ -8082,6 +8082,7 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
 
 .card_image {
   height: 110px;
+  margin: 5px;
 }
 
 .hand_score {
