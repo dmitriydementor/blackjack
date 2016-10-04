@@ -35,16 +35,13 @@
 
         <div class="row">
             <div class="col s12 center-align" id="dealer_hand_container">
-              <span class="card player_hand" id="dealer_hand">
+                <span class="card player_hand" id="dealer_hand">
                   <img src="img/clubs/10.svg" class="card_image" />
                   <img src="img/hearts/Ace.svg" class="card_image" />
                   <span class="hand_score">21</span>
-              </span>
+                </span>
             </div>
         </div>
-
-
-
 
         <div class="row">
             <div class="col s12 center-align">
@@ -55,7 +52,9 @@
                         <div class="hand_info">
                           $1000
                         </div>
-                        <span class="hand_score">21</span>
+                        <span class="hand_score red lighten-2">
+                          21
+                        </span>
                     </span>
                     <span class="card player_hand">
                         <img src="img/clubs/10.svg" class="card_image" />
@@ -64,7 +63,6 @@
                           $2000
                         </div>
                         <span class="hand_score">21</span>
-
                     </span>
                 </div>
             </div>
@@ -92,6 +90,13 @@
 
         <ul id="test_results">
         </ul>
+
+        <div id="results_modal" class="modal">
+            <div class="modal-content">
+                <h4 id="results_modal_header" class="center-align">Game result</h4>
+                <p id="results_modal_description"></p>
+            </div>
+        </div>
 
     </div>
 
