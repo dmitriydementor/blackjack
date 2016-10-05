@@ -8072,6 +8072,10 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
   padding: 10px;
 }
 
+.active_hand {
+  background-color: rgba(195, 195, 195, 0.39);
+}
+
 .inline-block {
   display: inline-block;
 }

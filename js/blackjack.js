@@ -149,6 +149,9 @@ PlayerHand.prototype.GetHTMLMarkdown = function(playerOrDealer) {
     if (playerOrDealer === 'player') {
         var handInfo = document.createElement('div');
         handInfo.className = 'hand_info';
+        if (this.isActive) {
+            rootHandElement.className += ' active_hand';
+        }
         handInfo.innerHTML = `$${this.moneyBet}`;
         var handScore = document.createElement('span');
         handScore.className = 'hand_score red lighten-1';
