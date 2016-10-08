@@ -208,14 +208,14 @@ var Blackjack = function(amountOfdecks) {
         );
         player.currentHandIndex = 0;
         dealer.dealerHand = new PlayerHand([blackjack.GetRandomCard(), blackjack.GetRandomCard()], 0);
-        var result = this.CheckForBlackJack(player.playerHands[0], dealer.dealerHand);
+        var result = blackjack.CheckForBlackJack(player.playerHands[0], dealer.dealerHand);
         switch (result) {
             case 'playersBlackjack':
                 {
                     player.playerHands[0].status = 'Blackjack';
                     player.playerHands[0].moneyBet *= 3;
                     gameuielements.resultsModalDescription = 'Players Blackjack';
-                    this.DisplayGameResults();
+                    blackjack.DisplayGameResults();
                     break;
                 }
             case 'dealersBlackjack':
@@ -223,14 +223,14 @@ var Blackjack = function(amountOfdecks) {
                     player.playerHands[0].status = 'loose';
                     player.playerHands[0].moneyBet = 0;
                     gameuielements.resultsModalDescription = 'Dealers Blackjack';
-                    this.DisplayGameResults();
+                    blackjack.DisplayGameResults();
                     break;
                 }
             case 'bothBlackjack':
                 {
                     player.playerHands[0].status = 'pull';
                     gameuielements.resultsModalDescription = 'Both blackjack';
-                    this.DisplayGameResults();
+                    blackjack.DisplayGameResults();
                     break;
                 }
             case 'nothing':
@@ -254,13 +254,13 @@ var Blackjack = function(amountOfdecks) {
             controls.doubleBtn.disabled = true;
             controls.hitBtn.disabled = true;
             controls.surrenderBtn.disabled = true;
-            this.SetMoneyWon();
-            this.DisplayGameResults();
+            blackjack.SetMoneyWon();
+            blackjack.DisplayGameResults();
         }
         controls.splitBtn.disabled = !player.playerHands[0].CanSplit();
     };
     this.Hit = function() {
-        player.playerHands[player.currentHandIndex].cards.push(this.GetRandomCard());
+        player.playerHands[player.currentHandIndex].cards.push(blackjack.GetRandomCard());
         gameuielements.UpdateHand(player.currentHandIndex, player.playerHands[player.currentHandIndex]);
         var score = player.playerHands[player.currentHandIndex].GetScore();
         if (score > 21) {
@@ -274,8 +274,8 @@ var Blackjack = function(amountOfdecks) {
                 controls.doubleBtn.disabled = true;
                 controls.surrenderBtn.disabled = true;
                 controls.standBtn.disabled = true;
-                this.SetMoneyWon();
-                this.DisplayGameResults();
+                blackjack.SetMoneyWon();
+                blackjack.DisplayGameResults();
             }
             gameuielements.UpdateHands(player.playerHands);
         }
@@ -287,10 +287,10 @@ var Blackjack = function(amountOfdecks) {
             controls.doubleBtn.disabled = true;
             controls.hitBtn.disabled = true;
             controls.surrenderBtn.disabled = true;
-            this.FillDealersHand();
+            blackjack.FillDealersHand();
             gameuielements.UpdateDealer(dealer.dealerHand);
-            this.SetMoneyWon();
-            this.DisplayGameResults();
+            blackjack.SetMoneyWon();
+            blackjack.DisplayGameResults();
         }
         controls.splitBtn.disabled = !player.playerHands[0].CanSplit();
         gameuielements.UpdateHands(player.playerHands);
@@ -327,6 +327,9 @@ var Blackjack = function(amountOfdecks) {
         if (!player.playerHands[player.currentHandIndex].CanSplit()) {
             controls.splitBtn.disabled = true;
         }
+    };
+    this.Surrneder = function() {
+      blackjack.EndGame();
     };
     this.FillDealersHand = function() {
         while (dealer.dealerHand.GetScore() < 17) {
@@ -369,6 +372,14 @@ var Controls = function() {
     this.surrenderBtn = document.getElementById('surrender_btn');
     this.splitBtn = document.getElementById('split_btn');
     this.standBtn = document.getElementById('stand_btn');
+
+    this.dealBtn.onclick=blackjack.Deal;
+    this.doubleBtn.onclick=blackjack.Double;
+    this.hitBtn.onclick=blackjack.Hit;
+    this.surrenderBtn.onclick=blackjack.Surrneder;
+    this.splitBtn.onclick=blackjack.Split;
+    this.standBtn.onclick=blackjack.Stand;
+
     this.StartNewGame = function() {
         this.dealBtn.disabled = false;
         this.doubleBtn.disabled = true;
