@@ -199,7 +199,7 @@ var Blackjack = function(amountOfdecks) {
         }
     };
 
-    this.Deal = function() {
+    this.Deal = () => {
         controls.dealBtn.disabled = true;
         var moneyBet = 100;
         player.cash -= moneyBet;
@@ -215,7 +215,7 @@ var Blackjack = function(amountOfdecks) {
                     player.playerHands[0].status = 'Blackjack';
                     player.playerHands[0].moneyBet *= 3;
                     gameuielements.resultsModalDescription = 'Players Blackjack';
-                    blackjack.DisplayGameResults();
+                    this.DisplayGameResults();
                     break;
                 }
             case 'dealersBlackjack':
@@ -223,14 +223,14 @@ var Blackjack = function(amountOfdecks) {
                     player.playerHands[0].status = 'loose';
                     player.playerHands[0].moneyBet = 0;
                     gameuielements.resultsModalDescription = 'Dealers Blackjack';
-                    blackjack.DisplayGameResults();
+                    this.DisplayGameResults();
                     break;
                 }
             case 'bothBlackjack':
                 {
                     player.playerHands[0].status = 'pull';
                     gameuielements.resultsModalDescription = 'Both blackjack';
-                    blackjack.DisplayGameResults();
+                    this.DisplayGameResults();
                     break;
                 }
             case 'nothing':
@@ -245,7 +245,7 @@ var Blackjack = function(amountOfdecks) {
         gameuielements.UpdateHands(player.playerHands);
         gameuielements.UpdateDealer(dealer.dealerHand);
     };
-    this.Double = function() {
+    this.Double = () => {
         player.playerHands[player.currentHandIndex].moneyBet *= 2;
         player.playerHands[player.currentHandIndex].cards.push(this.GetRandomCard());
         var goToNextDeck = player.GoToNextDeck();
@@ -254,13 +254,13 @@ var Blackjack = function(amountOfdecks) {
             controls.doubleBtn.disabled = true;
             controls.hitBtn.disabled = true;
             controls.surrenderBtn.disabled = true;
-            blackjack.SetMoneyWon();
-            blackjack.DisplayGameResults();
+            this.SetMoneyWon();
+            this.DisplayGameResults();
         }
         controls.splitBtn.disabled = !player.playerHands[0].CanSplit();
     };
-    this.Hit = function() {
-        player.playerHands[player.currentHandIndex].cards.push(blackjack.GetRandomCard());
+    this.Hit = () => {
+        player.playerHands[player.currentHandIndex].cards.push(this.GetRandomCard());
         gameuielements.UpdateHand(player.currentHandIndex, player.playerHands[player.currentHandIndex]);
         var score = player.playerHands[player.currentHandIndex].GetScore();
         if (score > 21) {
@@ -274,23 +274,23 @@ var Blackjack = function(amountOfdecks) {
                 controls.doubleBtn.disabled = true;
                 controls.surrenderBtn.disabled = true;
                 controls.standBtn.disabled = true;
-                blackjack.SetMoneyWon();
-                blackjack.DisplayGameResults();
+                this.SetMoneyWon();
+                this.DisplayGameResults();
             }
             gameuielements.UpdateHands(player.playerHands);
         }
     };
-    this.Stand = function() {
+    this.Stand = () => {
         var goToNextDeck = player.GoToNextDeck();
         if (!goToNextDeck) { // if last hand
             controls.standBtn.disabled = true;
             controls.doubleBtn.disabled = true;
             controls.hitBtn.disabled = true;
             controls.surrenderBtn.disabled = true;
-            blackjack.FillDealersHand();
+            this.FillDealersHand();
             gameuielements.UpdateDealer(dealer.dealerHand);
-            blackjack.SetMoneyWon();
-            blackjack.DisplayGameResults();
+            this.SetMoneyWon();
+            this.DisplayGameResults();
         }
         controls.splitBtn.disabled = !player.playerHands[0].CanSplit();
         gameuielements.UpdateHands(player.playerHands);
@@ -317,7 +317,7 @@ var Blackjack = function(amountOfdecks) {
             }
         }
     };
-    this.Split = function() {
+    this.Split = () => {
         var card = player.playerHands[player.currentHandIndex].cards.pop();
         player.playerHands.push(new PlayerHand([card, this.GetRandomCard()], player.playerHands[player.currentHandIndex].moneyBet, false));
         player.playerHands[player.currentHandIndex].cards.push(this.GetRandomCard());
@@ -329,7 +329,7 @@ var Blackjack = function(amountOfdecks) {
         }
     };
     this.Surrneder = function() {
-      blackjack.EndGame();
+        this.EndGame();
     };
     this.FillDealersHand = function() {
         while (dealer.dealerHand.GetScore() < 17) {
@@ -373,12 +373,12 @@ var Controls = function() {
     this.splitBtn = document.getElementById('split_btn');
     this.standBtn = document.getElementById('stand_btn');
 
-    this.dealBtn.onclick=blackjack.Deal;
-    this.doubleBtn.onclick=blackjack.Double;
-    this.hitBtn.onclick=blackjack.Hit;
-    this.surrenderBtn.onclick=blackjack.Surrneder;
-    this.splitBtn.onclick=blackjack.Split;
-    this.standBtn.onclick=blackjack.Stand;
+    this.dealBtn.onclick = blackjack.Deal;
+    this.doubleBtn.onclick = blackjack.Double;
+    this.hitBtn.onclick = blackjack.Hit;
+    this.surrenderBtn.onclick = blackjack.Surrneder;
+    this.splitBtn.onclick = blackjack.Split;
+    this.standBtn.onclick = blackjack.Stand;
 
     this.StartNewGame = function() {
         this.dealBtn.disabled = false;
